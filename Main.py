@@ -9,24 +9,26 @@ from time import sleep
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-
-driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
-
 driver.maximize_window()
 
+wait = WebDriverWait(driver,10)
+
 driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
-sleep(5)
 
-driver.find_element(by=By.NAME,value="username").send_keys("admin")
-sleep(3)
+wait.until(EC.presence_of_element_located((By.NAME,"username"))).send_keys("admin")
+
 password = "admin123"
-driver.find_element(by=By.NAME,value="password").send_keys(password)
-sleep(3)
-login_btn = driver.find_element(by=By.XPATH,value="//button[@type='submit']")
-sleep(3)
-login_btn.click()
-sleep(5)
+wait.until(EC.presence_of_element_located((By.NAME,"password"))).send_keys(password)
 
-sleep(3)
-print("browser opened successfully")
+login_btn = wait.until(EC.element_to_be_clickable((By.XPATH,"//button[@type='submit']")))
+login_btn.click()
+
+confirmation_status = wait.until(EC.visibility_of_element_located((By.XPATH,"//span[@class='oxd-topbar-header-breadcrumb']//h6[text()='Dashboard']"))).text
+
+print(f"Webpage title is : {driver.title}")
+if "Dashboard" in confirmation_status:
+    print("TC_01 passed ")
+else:
+    print("TC_01 failed")
+
 driver.quit()
