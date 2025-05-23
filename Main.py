@@ -26,7 +26,7 @@ login_btn.click()
 
 confirmation_status = wait.until(EC.visibility_of_element_located((By.XPATH,"//span[@class='oxd-topbar-header-breadcrumb']//h6[text()='Dashboard']"))).text
 
-print(f"Webpage title is : {driver.title}")
+assert "Dashboard" in confirmation_status, "TC_01 Failed"
 if "Dashboard" in confirmation_status:
     print("TC_01 passed ")
 else:
